@@ -1,0 +1,31 @@
+  <samp>
+        <ul class="ul">
+            <li class="li li-highlight selection top-selection">
+                <a class="li-a" href="/">
+                    Index
+                </a>
+            </li>
+            <li class="li li-Centered">
+                <div>
+                    <form>
+                        <input type="text" size="40px" id="input">
+                        <a href="javascript:void(null)" onclick="Submit();" id="a">Submit</a>
+                    </form>
+                </div>
+            </li>
+            <div  id="menu"  onclick="DisplayMenu();" class="li  li-rightalignment">
+                <a class="li-a" href="/sign_in" id="login">
+                    Login
+                </a>
+            </div>
+        </ul>
+    </samp>
+
+
+
+    <div  onclick="DisplayMenu();"class="dropdown">
+                <a href="#" class="dropbtn">Login</a>
+                <ul id="menu">
+
+                </ul>
+            </div>

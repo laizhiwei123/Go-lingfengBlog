@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>articleQueryModify</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Topnavigationbar.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Position.css">
+</head>
+<body class="body">
+<div>
+    <samp>
+        <ul class="ul">
+            <li class="li li-highlight">
+                <a class="li-a" href="/articleAdd">
+                    ArticleAdd
+                </a>
+            </li>
+            <li class="li li-highlight li-rightalignment selection">
+                <a class="li-a" href="/articleQuery">
+                    ArticleQuery
+                </a>
+            </li>
+        </ul>
+    </samp>
+</div>
+<div style="position: absolute; top: 150px; left: 350px">
+    <label>Source title:</label>
+    <label style="position: absolute;  left: 150px" id="title"></label>
+</div>
+<div>
+    <label style="position: absolute; top: 200px; left: 350px">Modifyconnten:</label>
+    <textarea style="resize: none; position: fixed; top: 200px; left: 500px; width: 800px; height: 300px;" id="content"></textarea>
+</div>
+<div style="position: absolute; top: 550px; left: 800px">
+    <button onclick="submitConten()">Submit</button>
+</div>
+<script type="application/javascript">
+    takeTitle();
+
+    function submitConten() {
+        let content = document.getElementById('content');
+        if (content.value.length > 0) {
+            let xhr;
+            if (window.XMLHttpRequest) {
+                xhr = new XMLHttpRequest();
+            } else {
+                xhr = new XMLHttpRequest("Microsoft.XMLHTTP");
+            }
+
+            xhr.open("POST", "/articleQuery/modify", true);
+            let url = location.search;
+            let id;
+            if (url.valueOf('?') != -1) {
+                id = url.substr(1).split('=')[1];
+            }
+            console.log(id);
+            let requestData = {"Id": id,"Content":content.value};
+            let requestJsonData = JSON.stringify(requestData);
+
+            xhr.send(requestJsonData);
+
+            xhr.onreadystatechange = function () {
+
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let data = eval('(' +xhr.responseText +')');
+                    console.log(data.state);
+                    if (data.state == "Success") {
+                        alert("ModifySuccess");
+                        window.location.href = '/articleQuery';
+                    } else {
+                        alert("ModifyFail");
+                        window.location.href = '/articleQuery';
+                    }
+                }
+            }
+        }
+    }
+    function takeTitle() {
+        let xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            xmlhttp = new XMLHttpRequest("Microsoft.XMLHTTP");
+        }
+        let url = document.URL;
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                let jsonData = xmlhttp.responseText;
+                data = eval('(' +jsonData +')');
+                if (data.state == "Success") {
+                    console.log(data);
+                    let  title = document.getElementById('title');
+                    title.innerHTML = data.title;
+                }
+            };
+        }
+    }
+</script>
+</body>
+</html>

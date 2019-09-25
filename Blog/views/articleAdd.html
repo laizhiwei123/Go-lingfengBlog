@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ArticleAdd</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Topnavigationbar.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Position.css">
+</head>
+<body class="body">
+<div>
+    <samp>
+        <ul class="ul">
+            <li class="li li-highlight top-selection">
+                <a class="li-a" href="/articleAdd">
+                    ArticleAdd
+                </a>
+            </li>
+            <li class="li li-highlight li-rightalignment" id="login-a" >
+                <a class="li-a" href="/sign_in">
+                    Login
+                </a>
+            </li>
+            <li class="li li-highlight li-rightalignment">
+                <a class="li-a" href="/articleQuery">
+                    ArticleQuery
+                </a>
+            </li>
+
+        </ul>
+    </samp>
+</div>
+<div class="ArticleADDCentered">
+    <form  id="from" onsubmit="return false">
+        <label class="ArticleAddLabel1">title:</label>
+        <input class="ArticleAddinput" name="title" id="input">
+        <label class="ArticleAddLabel2">content:</label>
+        <textarea class="ArticleAddTextarea" name="content" id="text"></textarea>
+        <input class="ArticleAddSubmit" type="submit" value="submit" onclick="submitFrom();">
+    </form>
+</div>
+</body>
+<script>
+    var xmlhttp;
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xmlhttp.open("GET","/articleAdd",true);
+    xmlhttp.setRequestHeader("Token", localStorage.getItem("Token"));
+    xmlhttp.send();
+    xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            data =xmlhttp.responseText;
+            data = eval('('+data +')');//eval('(' + jsonstr + ')');
+            console.log(data);
+            if (data.state == "Success") {
+                var login_a = document.getElementById("login-a");
+                // console.log(data.value);
+                login_a.innerHTML = "<a class='li-a'>" +data.userName +"</a>";
+            }
+        }
+    };
+
+    function submitFrom() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        var text = document.getElementById("text");
+        var input = document.getElementById("input");
+        var jsondata = {"input":input.value, "text": text.value};
+        jsondata = JSON.stringify(jsondata);
+        console.log(jsondata);
+
+        xmlhttp.open("POST","/articleAdd", true);
+        xmlhttp.setRequestHeader("Token", localStorage.getItem("Token"));
+        xmlhttp.send(jsondata);
+        console.log(xmlhttp.readyState +"   " +xmlhttp.status);
+        xmlhttp.onreadystatechange = () => {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                data =xmlhttp.responseText;
+
+                data = eval('('+data +')');//eval('(' + jsonstr + ')');
+                console.log(data);
+                if (data.state == "Success")  {
+                    text.value = "";
+                    input.value = "";
+                    alert("Success");
+                }else {
+                    //console.log("Fail");
+                    alert("Fail");
+                }
+
+            }
+        }
+    }
+
+</script>
+</html>

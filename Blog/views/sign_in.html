@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Login</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Topnavigationbar.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Position.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Frame.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Fonts.css">
+
+</head>
+<body class="body">
+<div>
+    <samp>
+        <ul class="ul">
+            <li class="li li-highlight">
+                <a class="li-a" href="/">
+                    Index
+                </a>
+            </li>
+        </ul>
+    </samp>
+</div>
+<div class="SignInCentered borderRadius">
+    <div>
+        <h4>
+            <a style="text-decoration: none" href="/sign_in" class=" SignInH4A1 selectionA">Login</a>
+            <a style="text-decoration: none" href="/sign_up" class="SignInH4AFont SignInH4A2">Register</a>
+        </h4>
+    </div>
+    <div>
+        <form id="form">
+            <input type="text" name="UserName" placeholder="UserName" size="40px" class="SignInFrom1Centered"
+                   id="userName">
+            <input type="password" name="PassWord" placeholder="PassWord" size="40px" class="SignInFrom2Centered"
+                   id="passWord">
+            <div class="SignInFromCheckboxCentered">
+                <input type="checkbox" id="remember">Remember me
+            </div>
+            <input type="button" value="Submit" class="SignInSubmitCentered" onclick="Submit();">
+        </form>
+        <a class="SignInFromErrCentered" href="">Error</a>
+
+    </div>
+</div>
+</body>
+<script>
+    function Submit() {
+        var userName = document.getElementById("userName");
+        var passWord = document.getElementById("passWord");
+        var remember = document.getElementById("remember");
+        let checkUserName = /^[a-zA-Z0-9_-]{4,16}$/; //用户名正则，4到16位（字母，数字，下划线，减号）
+        let checkPassWord = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
+
+        if (checkUserName.test(userName.value) && checkPassWord.test(passWord.value)) {
+            var xmlhttp;
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            } else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            var jsonData = {"userName": userName.value, "passWord": passWord.value, "remember": remember.checked};
+            jsonData = JSON.stringify(jsonData);
+
+            xmlhttp.open("POST", "/sign_in", true);
+            xmlhttp.send(jsonData);
+            xmlhttp.onreadystatechange = () => {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    data = xmlhttp.responseText;
+                    data = eval('(' + data + ')');//eval('(' + jsonstr + ')');
+
+                    console.log(localStorage.getItem("Token"));
+                    console.log(data.Token);
+                    if (data.state == "Success") {
+                        if (data.Token != undefined) {
+                            document.cookie = 'Token = ' +data.Token;
+                            console.log(document.cookie);
+                            userName.value = "";
+                            passWord.value = "";
+                            alert("Success");
+                            window.location.href = "/";
+                        } else {
+                            alert("Errer!")
+                        }
+                    } else {
+                        localStorage.removeItem("Token");
+                        alert("Errer!");
+                    }
+                    console.log(data)
+                }
+            }
+        } else {
+            alert("用户名 4到16位（字母，数字，下划线，减号） AND 密码，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        }
+
+    }
+</script>
+</html>

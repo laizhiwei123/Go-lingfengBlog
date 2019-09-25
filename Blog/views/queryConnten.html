@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ArticleAdd</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Topnavigationbar.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Position.css">
+</head>
+<body class="body">
+<div>
+    <samp>
+        <ul class="ul">
+            <li class="li li-highlight top-selection">
+                <a class="li-a" href="/">
+                    Index
+                </a>
+            </li>
+            <li class="li li-highlight li-rightalignment" id="login-a" >
+                <a class="li-a" href="/sign_in">
+                    Login
+                </a>
+            </li>
+
+        </ul>
+    </samp>
+</div>
+<div id="list" class="SignInFromErrCentered">
+
+</div>
+</body>
+<script>
+    VerificationUser();
+    QueryConnten();
+    function VerificationUser() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        xmlhttp.open("GET","/queryContentTitle",true );
+        xmlhttp.setRequestHeader("Token", localStorage.getItem("Token"));
+        xmlhttp.send();
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                data =xmlhttp.responseText;
+                data = eval('('+data +')');//eval('(' + jsonstr + ')');
+                console.log(data);
+                if (data.state == "Success") {
+                    var login_a = document.getElementById("login-a");
+                    login_a.innerHTML = "<a class='li-a'>" +data.userName +"</a>";
+                }
+            }
+        };
+    }
+
+   function QueryConnten() {
+       var strs;
+       var url = location.search;
+       if (url.indexOf('?') != -1) {
+           var str = url.substr(1);
+           strs = str.split('=');
+       }
+       var xhr = new XMLHttpRequest();
+       xhr.open("POST", "/queryContentTitle", true);
+       xhr.send(strs[1]);
+       xhr.onreadystatechange=function() {
+           if (xhr.readyState==4 && xhr.status==200) {
+               data =xhr.responseText;
+               data = eval('('+data +')');//eval('(' + jsonstr + ')');
+               PrintConnten(data);
+           }
+       };
+
+   }
+   function PrintConnten(data) {
+       var listContent = document.getElementById("list");
+       var list = "";
+       for (var i = 0; i < data.length; i++) {
+           list += "<p> <a href=/conten/" +data[i].Id +">" +data[i].Title+"</a> </p>";
+       }
+       console.log(list);
+       listContent.innerHTML = list;
+   }
+</script>
+</html>

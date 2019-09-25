@@ -1,0 +1,10 @@
+.borderRadius {
+    margin:0 auto;
+    background: rgba(255,146,180,0);
+    width:400px;
+    height:400px;
+    border:2px solid rgba(47,79,79,0.17);
+    border-radius:30px;
+    text-align: center;
+
+}

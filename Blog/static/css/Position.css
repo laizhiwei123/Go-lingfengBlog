@@ -1,0 +1,94 @@
+.li-Centered {
+    position: fixed;
+    left: 600px;
+    top: 8px;
+}
+.SignInCentered {
+    position: absolute;
+    left: 600px;
+    top: 80px;
+}
+
+.SignInFrom1Centered {
+    position: fixed;
+    left: 650px;
+    top: 250px;
+}
+
+.SignInFrom2Centered {
+    position: fixed;
+    left: 650px;
+    top: 300px;
+}
+
+.SignInFromCheckboxCentered {
+    position: fixed;
+    left: 650px;
+    top: 370px;
+}
+
+.SignInFromErrCentered {
+    position: fixed;
+    left: 900px;
+    top: 370px;
+}
+
+.SignInSubmitCentered {
+    position: fixed;
+    left: 780px;
+    top: 420px;
+}
+
+.ArticleADDCentered {
+    position: absolute;
+    left: 550px;
+    top: 130px;
+}
+.ArticleAddinput {
+    position: fixed;
+    width: 790px;
+    left: 400px;
+    top: 150px;
+}
+
+.ArticleAddTextarea {
+    resize: none;
+    position: fixed;
+    top: 200px;
+    left: 400px;
+    width: 800px;
+    height: 300px;
+}
+
+.ArticleAddSubmit {
+    position: fixed;
+    width: 100px;
+    left: 720px;
+    top: 550px;
+}
+.ArticleAddLabel1 {
+    position: fixed;
+    left: 350px;
+    top: 148px;
+}
+
+.ArticleAddLabel2{
+    position: fixed;
+    left: 325px;
+    top: 200px;
+}
+
+
+
+.SignInH4A1 {
+    position: fixed;
+    left: 650px;
+    top: 180px;
+}
+
+.SignInH4A2 {
+    position: fixed;
+    left: 900px;
+    top: 180px;
+}
+

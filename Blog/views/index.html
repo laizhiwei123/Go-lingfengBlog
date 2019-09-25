@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Index</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Topnavigationbar.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Position.css">
+    <style>
+        ul{
+            list-style-type:none;
+            margin:0;
+            padding: 0;
+            overflow: auto;
+            background-color:#333;
+            font-size: 13px;
+        }
+
+        li{
+            float:left;
+            
+        }
+
+        li a, .dropbtn
+        {
+            display:inline-block;
+            color:white;
+            text-align:center;
+            padding:14px 16px;
+            text-decoration:none;
+            margin: 0px 40px 0px 50px;
+        }
+        
+        .dropdown
+        {
+            float: right;
+            display:inline-block;
+        }
+
+        .dropdown-content
+        {
+            display:none;
+            position:absolute;
+            background-color:#f9f9f9;
+            min-width:160px;
+            box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+
+        .dropdown-content a
+        {
+            color:black;
+            padding:12px 16px;
+            text-decoration:none;
+            display:block;
+        }
+
+        .dropdown-content a:hover {background-color: #f1f1f1}
+
+        .dropdown:hover .dropdown-content
+        {
+            display:block;
+        }
+
+    </style>
+</head>
+<body class="body">
+<div>
+    <ul>
+        <li class="li-highlight"><a class=" top-selection" href="/">Index</a></li>
+        <li >
+            <form  onsubmit="return Submit()">
+            <div style="position: absolute; left: 39%; top: 2%;" >
+                <input  type="text" placeholder="搜索.."  id="input">
+                <input type="submit" value="Submit"  >
+            </div>
+            </form>
+        </li>
+        <div  onclick="Menu();" id="menu" class="dropdown">
+            <a href="/sign_in" class="dropbtn">Login</a>
+        </div>
+    </ul>
+</div>
+<div class="SignInCentered" id="div" >
+</div>
+</body>
+<script>
+    VerificationUser();
+    RequestContens();
+
+    function VerificationUser() {
+        var xmlhttp;
+
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        xmlhttp.open("GET", "/", true);
+        // xmlhttp.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+        xmlhttp.setRequestHeader("Accept", "*VerificationUser*");
+        xmlhttp.send();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                data = xmlhttp.responseText;
+                data = eval('(' + data + ')');
+                if (data.state == "Success") {
+                    var menu = document.getElementById('menu');
+                    menu.innerHTML = '<a href="#" class="dropbtn">' +data.userName +'</a>\n' +
+                        '            <div class="dropdown-content">\n' +
+                        '                <a href="#">PersonalData</a>\n' +
+                        '                <a href="#">SignOut</a>\n' +
+                        '            </div>';
+                }
+            }
+        };
+    }
+
+    function RequestContens() {
+        var xmlhttp;
+        var div = document.getElementById("div");
+        var value;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        xmlhttp.open("GET", "/", true);
+        xmlhttp.send();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                value = xmlhttp.responseText;
+                value = eval('(' + value + ')');//eval('(' + jsonstr + ')'); //可以将json字符串转换成json对象,注意需要在json字符外包裹一对小括号
+                var str = "";
+                for (i = 0; i < value.length -  1; i++) {
+                    let s = value[i].Content.substr(0, 20);
+                    str += "<h2> <a href=/conten/"+value[i].Id +">" +value[i].Title +"</a>" + "</h2>" +"<p>" +s +"..."+"</p>" +"<p>" +"UserName:" +value[i].UserName +" Time:" +value[i].CreatedTime +"</p>";
+                }
+                var div = document.getElementById("div");
+                div.innerHTML = str;
+
+            }
+        };
+    }
+
+    function Submit() {
+            var input = document.getElementById("input");
+            var a = document.getElementById("a");
+
+            if (input.value.length > 0) {
+                 // "/queryContentTitle?q=" +input.value;
+                window.open("/queryContentTitle?q=" +input.value);
+                return false;
+            }else {
+                alert("SearchConten Length  greater than 0");
+                return false;
+            }
+    }
+
+</script>
+</html>

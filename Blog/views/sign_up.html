@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Login</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Topnavigationbar.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Position.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Frame.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Fonts.css">
+
+</head>
+<body class="body">
+<div>
+    <samp>
+        <ul class="ul">
+            <li class="li li-highlight">
+                <a class="li-a" href="/">
+                    Index
+                </a>
+            </li>
+
+        </ul>
+    </samp>
+</div>
+<div class="SignInCentered borderRadius">
+    <div>
+        <h4>
+            <a style="text-decoration: none" href="/sign_in" class=" SignInH4A1 SignInH4AFont ">Login</a>
+            <a  style="text-decoration: none" href="/sign_up" class=" SignInH4A2 selectionA">Register</a>
+        </h4>
+    </div>
+    <div>
+        <form>
+            <input type="text" name="userName" placeholder="UserName" size="40px" class="SignInFrom1Centered" id="userName">
+            <input type="password" name="passWord" placeholder="PassWord"  size="40px" class="SignInFrom2Centered" id="passWord">
+            <input type="button" value="Submit" class="SignInSubmitCentered" onclick="Submit();">
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    function Submit() {
+        let userName = document.getElementById("userName");
+        let passWord = document.getElementById("passWord");
+        let checkUserName = /^[a-zA-Z0-9_-]{4,16}$/; //用户名正则，4到16位（字母，数字，下划线，减号）
+        let checkPassWord = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/; //密码强度正则，最少6位，包括至少1个大写字母，1个小写字母，1个数字
+        console.log(checkUserName.test(userName.value) +"   " +checkPassWord.test(passWord.value));
+        if ((checkUserName.test(userName.value)) && checkPassWord.test(passWord.value)) {
+            console.log("adad");
+        } else {
+            alert("用户 4到16位（字母，数字，下划线，减号） AND 密码，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符 ");
+            return false;
+        }
+
+        let xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }else {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+
+        var  jsonData = {"userName": userName.value, "passWord": passWord.value};
+        jsonData = JSON.stringify(jsonData);
+
+        xmlhttp.open("POST", "/sign_up", true);
+        xmlhttp.send(jsonData);
+        xmlhttp.onreadystatechange = () => {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+              data =xmlhttp.responseText;
+              data = eval('('+data +')');//eval('(' + jsonstr + ')');
+              console.log(data.state);
+              if (data.state == "Success")  {
+                  userName.value = "";
+                  passWord.value = "";
+                  alert("Success");
+              }else {
+                  alert("Errer");
+              }
+
+          }
+        }
+    }
+
+</script>
+</html>

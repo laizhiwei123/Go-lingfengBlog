@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/Topnavigationbar.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/Position.css">
+</head>
+<body class="body">
+<div>
+    <samp>
+        <ul class="ul">
+            <li class="li li-highlight selection">
+                <a class="li-a" href="/">
+                    Index
+                </a>
+            </li>
+            <li class="li li-Centered">
+                <div>
+                    <form method="get" action="/QueryContentTitle" accept-charset="UTF-8">
+                        <input type="text" size="40px" id="input" >
+                        <a href="javascript:void(null)" onclick="Submit();" id="a">aaa</a>
+                    </form>
+                </div>
+            </li>
+            <li class="li li-highlight li-rightalignment">
+                <a id="login" class="li-a" href="/sign_in">
+                    Login
+                </a>
+            </li>
+        </ul>
+    </samp>
+</div>
+<div class="SignInCentered" id="div">
+</div>
+</body>
+<script>
+    takeUserName();
+    requestContent();
+    function takeUserName() {
+        let xhr;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        }else {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        xhr.open("GET", "/conten/", true);
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                let data = eval('(' +xhr.responseText +')');
+                if (data.state == "Success") {
+                    console.log(data.state);
+                    let login = document.getElementById("login");
+                    login.innerText = data.userName;
+                }
+            }
+        };
+    }
+    function  requestContent () {
+        var url = location.pathname ;
+        var  path = url.substring(8);
+        console.log(path);
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        var jsonData = {"Id": path};
+        jsonData = JSON.stringify(jsonData);
+        //alert(jsonData);
+        xmlhttp.open("POST","/conten/",true);
+        xmlhttp.send(jsonData);
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                var data = xmlhttp.responseText;
+                data = eval('('+data +')');//eval('(' + jsonstr + ')'); //可以将json字符串转换成json对象,注意需要在json字符外包裹一对小括号
+                PrintConten(data);
+            }
+        };
+    }
+
+    function PrintConten(data) {
+        let div = document.getElementById('div');
+        div.innerHTML = "<h4>" +data.title +"</h4>" +'<p>' +data.content +'</p>' +'<p> UserName: '  +data.userName +" CreatedTime: " +data.CreatedTime +'</p>';
+    }
+
+</script>
+</html>
